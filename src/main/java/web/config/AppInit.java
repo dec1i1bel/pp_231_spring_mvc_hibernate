@@ -1,6 +1,10 @@
 package web.config;
 
+import org.springframework.lang.Nullable;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.Filter;
 
 public class AppInit extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -28,4 +32,13 @@ public class AppInit extends AbstractAnnotationConfigDispatcherServletInitialize
         return new String[]{"/"};
     }
 
+    @Nullable
+    @Override
+    protected Filter[] getServletFilters() {
+//        Поддержка кириллицы в POST-запросах и ответах
+        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+        encodingFilter.setEncoding("UTF-8");
+        encodingFilter.setForceEncoding(true);
+        return new Filter[]{encodingFilter};
+    }
 }
