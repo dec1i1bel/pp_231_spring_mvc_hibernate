@@ -1,5 +1,7 @@
 package web.config;
 
+import org.springframework.context.annotation.FilterType;
+import org.springframework.stereotype.Controller;
 import web.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +21,13 @@ import java.util.Properties;
 @Configuration
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement
-@ComponentScan(value = "web")
+@ComponentScan(basePackages = "web",
+        excludeFilters = {
+               @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Controller.class)
+                ,
+               @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebConfig.class)
+        }
+)
 public class AppConfig {
 
    @Autowired

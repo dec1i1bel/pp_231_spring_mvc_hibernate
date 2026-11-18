@@ -3,14 +3,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Список пользователей</title>
 </head>
 <body>
-<div>
-    <h1>я русский!</h1>
-    <th:block th:each="msg : ${messages}">
-        <h1 th:text="${msg}"></h1>
-    </th:block>
+<p th:if="${#lists.isEmpty(users)}">Пользователи не добавлены</p>
+<div th:unless="${#lists.isEmpty(users)}">
+    <h1>Список пользователей</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.phone}"></td>
+            <td th:text="${user.email}"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
