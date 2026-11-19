@@ -2,12 +2,15 @@ package web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import web.model.User;
 import web.service.UserService;
+
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -19,17 +22,27 @@ public class UserController {
 	}
 
 	@GetMapping("/add")
-	public String showAddForm() {
+	public String showAddForm(ModelMap modelMap) {
+		modelMap.addAttribute("user", new User());
 		return "add";
 	}
 
 	@PostMapping("/add")
 	public String add(
+//			Spring валидирует объект User
+			@Valid User user,
+//			Хранит результаты валидации
+			BindingResult result,
 			RedirectAttributes redirectAttributes,
 			@RequestParam("name") String name,
 			@RequestParam("phone") String phone,
 			@RequestParam("email") String email
 	) {
+//		Если есть ошибки - вернуться на форму
+		if (result.hasErrors()) {
+			return "add";
+		}
+
 		userService.add(new User(name, phone, email));
 		redirectAttributes.addFlashAttribute("messageSuccess", String.format("Пользователь %s (телефон: %s, email: %s) успешно добавлен", name, phone, email));
 		return "redirect:/";
